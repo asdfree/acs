@@ -1,7 +1,23 @@
 if ( .Platform$OS.type == 'windows' ) memory.limit( 256000 )
 
+this_sample_break <- Sys.getenv( "this_sample_break" )
+
 library(lodown)
-lodown( "acs" , output_dir = file.path( getwd() ) )
+
+acs_cat <-
+	get_catalog( "acs" ,
+		output_dir = file.path( getwd() ) )
+
+# skip the three-year and five-year files
+acs_cat <- subset( acs_cat , time_period == '1-Year' )
+
+record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 12 ) )
+
+acs_cat <- acs_cat[ record_categories == this_sample_break , ]
+
+lodown( "acs" , acs_cat )
+
+if( any( acs_cat$year == 2011 ) ){
 library(lodown)
 # examine all available ACS microdata files
 acs_cat <-
@@ -17,12 +33,47 @@ library(DBI)
 library(RSQLite)
 library(survey)
 
-acs_design <- readRDS( file.path( getwd() , "acs2011_1yr.rds" ) )
+# create a nationwide survey design
+# acs_design_with_puerto_rico <-
+	# svrepdesign(
+		# weight = ~pwgtp ,
+		# repweights = 'pwgtp[0-9]+' ,
+		# scale = 4 / 80 ,
+		# rscales = rep( 1 , 80 ) ,
+		# mse = TRUE ,
+		# type = 'JK1' ,
+		# data = catalog[ i , 'db_tablename' ] ,
+		# dbtype = "SQLite" ,
+		# dbname = catalog[ i , 'dbfile' ]
+	# )
+	
+# # workaround for a bug in survey::svrepdesign.character
+# acs_design$mse <- TRUE
 
-acs_design_with_puerto_rico <- open( acs_design , driver = SQLite() )
+# # remove puerto rico from the national design
+# acs_design <- subset( acs_design_with_puerto_rico , st != 72 )
 
-# remove puerto rico
-acs_design <- subset( acs_design_with_puerto_rico , st != 72 )
+# to conserve RAM, create a smaller table within the database
+db <- dbConnect( RSQLite:SQLite() , catalog[ i , 'dbfile' ] )
+dbSendQuery( db , "CREATE TABLE alabama_1yr_2011 AS ( SELECT * FROM acs2011_1yr WHERE st = 1 )" )
+
+# notice the edited `data =` parameter
+# this design is alabama only
+acs_design <-
+	svrepdesign(
+		weight = ~pwgtp ,
+		repweights = 'pwgtp[0-9]+' ,
+		scale = 4 / 80 ,
+		rscales = rep( 1 , 80 ) ,
+		mse = TRUE ,
+		type = 'JK1' ,
+		data = 'acs2011_1yr' ,
+		dbtype = "SQLite" ,
+		dbname = catalog[ i , 'dbfile' ]
+	)
+	
+# workaround for a bug in survey::svrepdesign.character
+acs_design$mse <- TRUE
 acs_design <-
 	update(
 		
@@ -169,3 +220,4 @@ svytotal(
 
 # note: the MOE (margin of error) column can be calculated as the standard error x 1.645 #
 
+}
