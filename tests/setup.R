@@ -42,9 +42,9 @@ library(survey)
 		# rscales = rep( 1 , 80 ) ,
 		# mse = TRUE ,
 		# type = 'JK1' ,
-		# data = catalog[ i , 'db_tablename' ] ,
+		# data = acs_cat[ i , 'db_tablename' ] ,
 		# dbtype = "SQLite" ,
-		# dbname = catalog[ i , 'dbfile' ]
+		# dbname = acs_cat[ i , 'dbfile' ]
 	# )
 	
 # # workaround for a bug in survey::svrepdesign.character
@@ -54,7 +54,7 @@ library(survey)
 # acs_design <- subset( acs_design_with_puerto_rico , st != 72 )
 
 # to conserve RAM, create a smaller table within the database
-db <- dbConnect( RSQLite::SQLite() , catalog[ i , 'dbfile' ] )
+db <- dbConnect( RSQLite::SQLite() , acs_cat[ i , 'dbfile' ] )
 dbSendQuery( db , "CREATE TABLE alabama_1yr_2011 AS ( SELECT * FROM acs2011_1yr WHERE st = 1 )" )
 
 # notice the edited `data =` parameter
@@ -67,9 +67,9 @@ acs_design <-
 		rscales = rep( 1 , 80 ) ,
 		mse = TRUE ,
 		type = 'JK1' ,
-		data = 'acs2011_1yr' ,
+		data = acs_cat[ i , 'db_tablename' ] ,
 		dbtype = "SQLite" ,
-		dbname = catalog[ i , 'dbfile' ]
+		dbname = acs_cat[ i , 'dbfile' ]
 	)
 	
 # workaround for a bug in survey::svrepdesign.character
