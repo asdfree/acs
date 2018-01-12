@@ -42,9 +42,9 @@ library(survey)
 		# rscales = rep( 1 , 80 ) ,
 		# mse = TRUE ,
 		# type = 'JK1' ,
-		# data = acs_cat[ i , 'db_tablename' ] ,
+		# data = 'acs2011_1yr' ,
 		# dbtype = "SQLite" ,
-		# dbname = acs_cat[ i , 'dbfile' ]
+		# dbname = acs_cat$dbfile
 	# )
 	
 # # workaround for a bug in survey::svrepdesign.character
@@ -67,9 +67,9 @@ acs_design <-
 		rscales = rep( 1 , 80 ) ,
 		mse = TRUE ,
 		type = 'JK1' ,
-		data = acs_cat[ i , 'db_tablename' ] ,
+		data = 'alabama_1yr_2011' ,
 		dbtype = "SQLite" ,
-		dbname = acs_cat[ i , 'dbfile' ]
+		dbname = acs_cat$dbfile
 	)
 	
 # workaround for a bug in survey::svrepdesign.character
