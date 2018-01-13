@@ -1,7 +1,5 @@
 if ( .Platform$OS.type == 'windows' ) memory.limit( 256000 )
 
-options("lodown.cachaca.savecache"=FALSE)
-
 this_sample_break <- Sys.getenv( "this_sample_break" )
 
 library(lodown)
@@ -18,6 +16,8 @@ record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) 
 acs_cat <- acs_cat[ record_categories == this_sample_break , ]
 
 lodown( "acs" , acs_cat )
+
+options("lodown.cachaca.savecache"=FALSE)
 
 if( any( acs_cat$year == 2011 ) ){
 library(lodown)
