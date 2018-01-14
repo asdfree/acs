@@ -106,33 +106,49 @@ acs_design <-
 					"Washington", "West Virginia", "Wisconsin", "Wyoming")
 			) ,
 		
+		cit =
+			factor( 
+				cit , 
+				levels = 1:5 , 
+				labels = 
+					c( 
+						'born in the u.s.' ,
+						'born in the territories' ,
+						'born abroad to american parents' ,
+						'naturalized citizen' ,
+						'non-citizen'
+					)
+			) ,
+		
+		poverty_level = as.numeric( povpip ) ,
+		
 		married = as.numeric( mar %in% 1 ) ,
 		
 		sex = factor( sex , labels = c( 'male' , 'female' ) )
 	)
 sum( weights( acs_design , "sampling" ) != 0 )
 
-svyby( ~ one , ~ sex , acs_design , unwtd.count )
+svyby( ~ one , ~ cit , acs_design , unwtd.count )
 svytotal( ~ one , acs_design )
 
-svyby( ~ one , ~ sex , acs_design , svytotal )
-svymean( ~ povpip , acs_design , na.rm = TRUE )
+svyby( ~ one , ~ cit , acs_design , svytotal )
+svymean( ~ poverty_level , acs_design , na.rm = TRUE )
 
-svyby( ~ povpip , ~ sex , acs_design , svymean , na.rm = TRUE )
-svymean( ~ state_name , acs_design )
+svyby( ~ poverty_level , ~ cit , acs_design , svymean , na.rm = TRUE )
+svymean( ~ sex , acs_design )
 
-svyby( ~ state_name , ~ sex , acs_design , svymean )
-svytotal( ~ povpip , acs_design , na.rm = TRUE )
+svyby( ~ sex , ~ cit , acs_design , svymean )
+svytotal( ~ poverty_level , acs_design , na.rm = TRUE )
 
-svyby( ~ povpip , ~ sex , acs_design , svytotal , na.rm = TRUE )
-svytotal( ~ state_name , acs_design )
+svyby( ~ poverty_level , ~ cit , acs_design , svytotal , na.rm = TRUE )
+svytotal( ~ sex , acs_design )
 
-svyby( ~ state_name , ~ sex , acs_design , svytotal )
-svyquantile( ~ povpip , acs_design , 0.5 , na.rm = TRUE )
+svyby( ~ sex , ~ cit , acs_design , svytotal )
+svyquantile( ~ poverty_level , acs_design , 0.5 , na.rm = TRUE )
 
 svyby( 
-	~ povpip , 
-	~ sex , 
+	~ poverty_level , 
+	~ cit , 
 	acs_design , 
 	svyquantile , 
 	0.5 ,
@@ -146,9 +162,9 @@ svyratio(
 	acs_design ,
 	na.rm = TRUE
 )
-sub_acs_design <- subset( acs_design , st == 6 )
-svymean( ~ povpip , sub_acs_design , na.rm = TRUE )
-this_result <- svymean( ~ povpip , acs_design , na.rm = TRUE )
+sub_acs_design <- subset( acs_design , agep >= 65 )
+svymean( ~ poverty_level , sub_acs_design , na.rm = TRUE )
+this_result <- svymean( ~ poverty_level , acs_design , na.rm = TRUE )
 
 coef( this_result )
 SE( this_result )
@@ -157,8 +173,8 @@ cv( this_result )
 
 grouped_result <-
 	svyby( 
-		~ povpip , 
-		~ sex , 
+		~ poverty_level , 
+		~ cit , 
 		acs_design , 
 		svymean ,
 		na.rm = TRUE 
@@ -169,22 +185,22 @@ SE( grouped_result )
 confint( grouped_result )
 cv( grouped_result )
 degf( acs_design )
-svyvar( ~ povpip , acs_design , na.rm = TRUE )
+svyvar( ~ poverty_level , acs_design , na.rm = TRUE )
 # SRS without replacement
-svymean( ~ povpip , acs_design , na.rm = TRUE , deff = TRUE )
+svymean( ~ poverty_level , acs_design , na.rm = TRUE , deff = TRUE )
 
 # SRS with replacement
-svymean( ~ povpip , acs_design , na.rm = TRUE , deff = "replace" )
+svymean( ~ poverty_level , acs_design , na.rm = TRUE , deff = "replace" )
 svyciprop( ~ married , acs_design ,
 	method = "likelihood" )
-svyttest( povpip ~ married , acs_design )
+svyttest( poverty_level ~ married , acs_design )
 svychisq( 
-	~ married + state_name , 
+	~ married + sex , 
 	acs_design 
 )
 glm_result <- 
 	svyglm( 
-		povpip ~ married + state_name , 
+		poverty_level ~ married + sex , 
 		acs_design 
 	)
 
