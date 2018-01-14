@@ -112,27 +112,27 @@ acs_design <-
 	)
 sum( weights( acs_design , "sampling" ) != 0 )
 
-svyby( ~ one , ~ state_name , acs_design , unwtd.count )
+svyby( ~ one , ~ sex , acs_design , unwtd.count )
 svytotal( ~ one , acs_design )
 
-svyby( ~ one , ~ state_name , acs_design , svytotal )
+svyby( ~ one , ~ sex , acs_design , svytotal )
 svymean( ~ povpip , acs_design , na.rm = TRUE )
 
-svyby( ~ povpip , ~ state_name , acs_design , svymean , na.rm = TRUE )
-svymean( ~ sex , acs_design )
+svyby( ~ povpip , ~ sex , acs_design , svymean , na.rm = TRUE )
+svymean( ~ state_name , acs_design )
 
-svyby( ~ sex , ~ state_name , acs_design , svymean )
+svyby( ~ state_name , ~ sex , acs_design , svymean )
 svytotal( ~ povpip , acs_design , na.rm = TRUE )
 
-svyby( ~ povpip , ~ state_name , acs_design , svytotal , na.rm = TRUE )
-svytotal( ~ sex , acs_design )
+svyby( ~ povpip , ~ sex , acs_design , svytotal , na.rm = TRUE )
+svytotal( ~ state_name , acs_design )
 
-svyby( ~ sex , ~ state_name , acs_design , svytotal )
+svyby( ~ state_name , ~ sex , acs_design , svytotal )
 svyquantile( ~ povpip , acs_design , 0.5 , na.rm = TRUE )
 
 svyby( 
 	~ povpip , 
-	~ state_name , 
+	~ sex , 
 	acs_design , 
 	svyquantile , 
 	0.5 ,
@@ -158,7 +158,7 @@ cv( this_result )
 grouped_result <-
 	svyby( 
 		~ povpip , 
-		~ state_name , 
+		~ sex , 
 		acs_design , 
 		svymean ,
 		na.rm = TRUE 
@@ -179,12 +179,12 @@ svyciprop( ~ married , acs_design ,
 	method = "likelihood" )
 svyttest( povpip ~ married , acs_design )
 svychisq( 
-	~ married + sex , 
+	~ married + state_name , 
 	acs_design 
 )
 glm_result <- 
 	svyglm( 
-		povpip ~ married + sex , 
+		povpip ~ married + state_name , 
 		acs_design 
 	)
 
