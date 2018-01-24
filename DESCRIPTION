@@ -9,4 +9,4 @@ License: GPL-3
 Imports: archive, DBI, RSQLite, survey, convey, lodown
 Encoding: UTF-8
 LazyData: true
-Remotes: ajdamico/lodown
+Remotes: ajdamico/lodown, jimhester/archive
