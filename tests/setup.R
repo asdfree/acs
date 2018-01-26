@@ -209,6 +209,14 @@ library(convey)
 acs_design <- convey_prep( acs_design )
 
 svygini( ~ hincp , acs_design , na.rm = TRUE )
+library(srvyr)
+acs_srvyr_design <- as_survey( acs_design )
+acs_srvyr_design %>%
+	summarize( mean = survey_mean( poverty_level , na.rm = TRUE ) )
+
+acs_srvyr_design %>%
+	group_by( cit ) %>%
+	summarize( mean = survey_mean( poverty_level , na.rm = TRUE ) )
 
 svytotal( ~I( relp %in% 0:17 ) , acs_design )						# total population
 svytotal( ~I( relp %in% 0:15 ) , acs_design )						# housing unit population
