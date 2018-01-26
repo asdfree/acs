@@ -209,6 +209,7 @@ library(convey)
 acs_design <- convey_prep( acs_design )
 
 svygini( ~ hincp , acs_design , na.rm = TRUE )
+library(dbplyr)
 library(srvyr)
 acs_srvyr_design <- as_survey( acs_design )
 acs_srvyr_design %>%
