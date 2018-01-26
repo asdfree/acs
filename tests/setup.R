@@ -13,7 +13,7 @@ acs_cat <-
 # skip the three-year and five-year files
 acs_cat <- subset( acs_cat , time_period == '1-Year' )
 
-record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 50 ) )
+record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 100 ) )
 
 acs_cat <- acs_cat[ record_categories == this_sample_break , ]
 
@@ -29,18 +29,18 @@ acs_cat <-
 	get_catalog( "acs" ,
 		output_dir = file.path( getwd() ) )
 
-# 2011 single-year only
+# 2011 alabama single-year only
 acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' & stateab == 'al' )
 # download the microdata to your local computer
 
 
-# alternative subsets:
+# # alternative subsets:
 
-# nationwide merged table including puerto rico
+# # nationwide merged table including puerto rico
 # acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' )
 # lodown( "acs" , acs_cat )
 
-# nationwide merged table excluding puerto rico
+# # nationwide merged table excluding puerto rico
 # acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' & stateab != 'pr' )
 # lodown( "acs" , acs_cat )
 
@@ -49,11 +49,11 @@ library(survey)
 acs_df <- 
 	readRDS( 
 		file.path( getwd() , 
-			"2011/1-year/merged.rds" ) 
+			"2011/1-Year/merged.rds" ) 
 	)
 
-# notice the edited `data =` parameter
-# this design is alabama only
+# because of the catalog subset above
+# the `merged.rds` file is alabama only
 acs_design <-
 	svrepdesign(
 		weight = ~pwgtp ,
