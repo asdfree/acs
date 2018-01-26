@@ -13,13 +13,13 @@ acs_cat <-
 # skip the three-year and five-year files
 acs_cat <- subset( acs_cat , time_period == '1-Year' )
 
-record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 12 ) )
+record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 108 ) )
 
 acs_cat <- acs_cat[ record_categories == this_sample_break , ]
 
 lodown( "acs" , acs_cat )
 
-if( any( acs_cat$year == 2011 ) ){
+if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
 library(lodown)
 # examine all available ACS microdata files
 acs_cat <-
