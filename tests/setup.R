@@ -13,9 +13,12 @@ acs_cat <-
 # skip the three-year and five-year files
 acs_cat <- subset( acs_cat , time_period == '1-Year' )
 
-record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 108 ) )
+record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 50 ) )
 
 acs_cat <- acs_cat[ record_categories == this_sample_break , ]
+
+# for alabama 2011, toss out other nearby states
+if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ) acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
 
 lodown( "acs" , acs_cat )
 
@@ -27,37 +30,27 @@ acs_cat <-
 		output_dir = file.path( getwd() ) )
 
 # 2011 single-year only
-acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' )
+acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' & stateab == 'al' )
 # download the microdata to your local computer
 
 
-library(DBI)
-library(RSQLite)
+# alternative subsets:
+
+# nationwide merged table including puerto rico
+# acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' )
+# lodown( "acs" , acs_cat )
+
+# nationwide merged table excluding puerto rico
+# acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' & stateab != 'pr' )
+# lodown( "acs" , acs_cat )
+
 library(survey)
 
-# create a nationwide survey design
-# acs_design_with_puerto_rico <-
-	# svrepdesign(
-		# weight = ~pwgtp ,
-		# repweights = 'pwgtp[0-9]+' ,
-		# scale = 4 / 80 ,
-		# rscales = rep( 1 , 80 ) ,
-		# mse = TRUE ,
-		# type = 'JK1' ,
-		# data = 'acs2011_1yr' ,
-		# dbtype = "SQLite" ,
-		# dbname = acs_cat$dbfile
-	# )
-	
-# # workaround for a bug in survey::svrepdesign.character
-# acs_design$mse <- TRUE
-
-# # remove puerto rico from the national design
-# acs_design <- subset( acs_design_with_puerto_rico , st != 72 )
-
-# to conserve RAM, create a smaller table within the database
-db <- dbConnect( RSQLite::SQLite() , acs_cat$dbfile )
-dbSendQuery( db , "CREATE TABLE alabama_1yr_2011 AS SELECT * FROM acs2011_1yr WHERE st = '01'" )
+acs_df <- 
+	readRDS( 
+		file.path( getwd() , 
+			"2011/1-year/merged.rds" ) 
+	)
 
 # notice the edited `data =` parameter
 # this design is alabama only
@@ -69,9 +62,7 @@ acs_design <-
 		rscales = rep( 1 , 80 ) ,
 		mse = TRUE ,
 		type = 'JK1' ,
-		data = 'alabama_1yr_2011' ,
-		dbtype = "SQLite" ,
-		dbname = acs_cat$dbfile
+		data = acs_df
 	)
 	
 # workaround for a bug in survey::svrepdesign.character
@@ -92,7 +83,7 @@ acs_design <-
 					33L, 34L, 35L, 36L, 37L, 38L, 39L, 
 					40L, 41L, 42L, 44L, 45L, 46L, 47L, 
 					48L, 49L, 50L, 51L, 53L, 54L, 55L, 
-					56L) ,
+					56L, 72L) ,
 				labels =
 					c("Alabama", "Alaska", "Arizona", "Arkansas", "California", 
 					"Colorado", "Connecticut", "Delaware", "District of Columbia", 
@@ -103,7 +94,7 @@ acs_design <-
 					"New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", 
 					"Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", 
 					"South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", 
-					"Washington", "West Virginia", "Wisconsin", "Wyoming")
+					"Washington", "West Virginia", "Wisconsin", "Wyoming", "Puerto Rico")
 			) ,
 		
 		cit =
