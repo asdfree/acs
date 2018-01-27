@@ -18,8 +18,8 @@ acs_cat <- acs_cat[ split( seq( nrow( acs_cat ) ) , 1 + sort( seq( nrow( acs_cat
 # for alabama 2011, toss out other nearby states
 if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
 	acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
-# for all other builds, just take five records
-} else acs_cat <- head( acs_cat , 5 )
+# for all other builds, just take four records
+} else acs_cat <- head( acs_cat , 4 )
 
 lodown( "acs" , acs_cat )
 
