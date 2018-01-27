@@ -10,15 +10,20 @@ acs_cat <-
 	get_catalog( "acs" ,
 		output_dir = file.path( getwd() ) )
 
-# skip the three-year and five-year files
+# skip the three-year and five-year files entirely
 acs_cat <- subset( acs_cat , time_period == '1-Year' )
 
-record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 100 ) )
+record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 50 ) )
 
 acs_cat <- acs_cat[ record_categories == this_sample_break , ]
 
 # for alabama 2011, toss out other nearby states
-if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ) acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
+if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
+	acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
+# for all other builds, just take three records
+} else {
+	acs_cat <- head( acs_cat , 3 )
+}
 
 lodown( "acs" , acs_cat )
 
