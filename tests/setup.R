@@ -54,7 +54,7 @@ library(survey)
 acs_df <- 
 	readRDS( 
 		file.path( getwd() , 
-			"2011/1-Year/merged.rds" ) 
+			"acs2011_1yr.rds" ) 
 	)
 
 # because of the catalog subset above
