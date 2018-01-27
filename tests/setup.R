@@ -13,7 +13,7 @@ acs_cat <-
 # skip the three-year and five-year files entirely
 acs_cat <- subset( acs_cat , time_period == '1-Year' )
 
-record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 50 ) )
+record_categories <- ceiling( seq( nrow( acs_cat ) ) / ceiling( nrow( acs_cat ) / 100 ) )
 
 acs_cat <- acs_cat[ record_categories == this_sample_break , ]
 
@@ -21,8 +21,6 @@ acs_cat <- acs_cat[ record_categories == this_sample_break , ]
 if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
 	acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
 # for all other builds, just take six records
-} else {
-	acs_cat <- head( acs_cat , 6 )
 }
 
 lodown( "acs" , acs_cat )
