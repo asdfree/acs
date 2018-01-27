@@ -34,7 +34,7 @@ acs_cat <-
 	get_catalog( "acs" ,
 		output_dir = file.path( getwd() ) )
 
-# 2011 alabama single-year only
+# 2011 alabama single-year only. remove the ` & stateab == 'al'` to construct a nationwide table
 acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' & stateab == 'al' )
 # download the microdata to your local computer
 

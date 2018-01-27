@@ -4,7 +4,7 @@ Title: acs
 Version: 0.1.0
 Author: Anthony Joseph Damico
 Maintainer: Anthony Joseph Damico <ajdamico@gmail.com>
-Description: A continuous integration package, tested on ajdamico/asdfree commit f67bc8800574015f1856dc83e194ce3b8af1107d ajdamico/lodown commit 5c73fbdaea424fc0a45f7fc77aeaa805368125b6
+Description: A continuous integration package, tested on ajdamico/asdfree commit f67bc8800574015f1856dc83e194ce3b8af1107d ajdamico/lodown commit f18951e31bb2c18af22c6527c48e76b3873cc65d
 License: GPL-3
 Imports: archive, survey, convey, lodown
 Encoding: UTF-8
