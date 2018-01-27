@@ -13,13 +13,13 @@ acs_cat <-
 # skip the three-year and five-year files entirely
 acs_cat <- subset( acs_cat , time_period == '1-Year' )
 
-acs_cat <- acs_cat[ split( seq( nrow( acs_cat ) ) , 1 + sort( seq( nrow( acs_cat ) ) %% 150 ) )[[ this_sample_break ]] , ]
+acs_cat <- acs_cat[ split( seq( nrow( acs_cat ) ) , 1 + sort( seq( nrow( acs_cat ) ) %% 15 ) )[[ this_sample_break ]] , ]
 
 # for alabama 2011, toss out other nearby states
 if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
 	acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
-# for all other builds, just take six records
-}
+# for all other builds, just take five records
+} else acs_cat <- head( acs_cat , 5 )
 
 lodown( "acs" , acs_cat )
 
