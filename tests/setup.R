@@ -14,7 +14,7 @@ acs_cat <-
 acs_cat <- subset( acs_cat , time_period == '1-Year' )
 
 # skip the top fifteen states by population
-acs_cat <- subset( acs_cat , !( stateab %in% c( 'ca' , 'tx' , 'fl' , 'ny' , 'pa' , 'il' , 'oh' , 'ga' , 'nc' , 'mi' , 'nj' , 'va' , 'wa' , 'az ) ) )
+acs_cat <- subset( acs_cat , !( stateab %in% c( 'ca' , 'tx' , 'fl' , 'ny' , 'pa' , 'il' , 'oh' , 'ga' , 'nc' , 'mi' , 'nj' , 'va' , 'wa' , 'az' ) ) )
 
 acs_cat <- acs_cat[ split( seq( nrow( acs_cat ) ) , 1 + sort( seq( nrow( acs_cat ) ) %% 15 ) )[[ this_sample_break ]] , ]
 
