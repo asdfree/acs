@@ -10,16 +10,18 @@ acs_cat <-
 	get_catalog( "acs" ,
 		output_dir = file.path( getwd() ) )
 
-# skip the three-year and five-year files entirely
+# skip the three-year and five-year files
 acs_cat <- subset( acs_cat , time_period == '1-Year' )
+
+# skip the top ten states by population
+acs_cat <- subset( acs_cat , !( stateab %in% c( 'ca' , 'tx' , 'fl' , 'ny' , 'pa' , 'il' , 'oh' , 'ga' , 'nc' ) ) )
 
 acs_cat <- acs_cat[ split( seq( nrow( acs_cat ) ) , 1 + sort( seq( nrow( acs_cat ) ) %% 15 ) )[[ this_sample_break ]] , ]
 
 # for alabama 2011, toss out other nearby states
 if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
 	acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
-# for all other builds, just take four records
-} else acs_cat <- head( acs_cat , 4 )
+}
 
 lodown( "acs" , acs_cat )
 
