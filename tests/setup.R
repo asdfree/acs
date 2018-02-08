@@ -23,29 +23,29 @@ if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
 	acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
 }
 
-lodown( "acs" , acs_cat )
+acs_cat <- lodown( "acs" , acs_cat )
 
 if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
-library(lodown)
-# examine all available ACS microdata files
-acs_cat <-
-	get_catalog( "acs" ,
-		output_dir = file.path( getwd() ) )
 
-# 2011 alabama single-year only. remove the ` & stateab == 'al'` to construct a nationwide table
-acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' & stateab == 'al' )
-# download the microdata to your local computer
+
+
+
+
+
+
+
+
 
 
 # # alternative subsets:
 
 # # nationwide merged table including puerto rico
 # acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' )
-# lodown( "acs" , acs_cat )
+# acs_cat <- lodown( "acs" , acs_cat )
 
 # # nationwide merged table excluding puerto rico
 # acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' & stateab != 'pr' )
-# lodown( "acs" , acs_cat )
+# acs_cat <- lodown( "acs" , acs_cat )
 
 library(survey)
 
