@@ -10,22 +10,19 @@ acs_cat <-
 	get_catalog( "acs" ,
 		output_dir = file.path( getwd() ) )
 
-# skip the three-year and five-year files
-acs_cat <- subset( acs_cat , time_period == '1-Year' )
+# alabama one-year and all wyoming only
+acs_cat <- subset( acs_cat , ( stateab == 'al' & time_period == '1-Year' ) | stateab == 'wy' )
 
-# skip the top fifteen states by population
-acs_cat <- subset( acs_cat , !( stateab %in% c( 'ca' , 'tx' , 'fl' , 'ny' , 'pa' , 'il' , 'oh' , 'ga' , 'nc' , 'mi' , 'nj' , 'va' , 'wa' , 'az' ) ) )
+acs_cat <- acs_cat[ split( seq( nrow( acs_cat ) ) , 1 + sort( seq( nrow( acs_cat ) ) %% 13 ) )[[ this_sample_break ]] , ]
 
-acs_cat <- acs_cat[ split( seq( nrow( acs_cat ) ) , 1 + sort( seq( nrow( acs_cat ) ) %% 50 ) )[[ this_sample_break ]] , ]
-
-# for alabama 2011, toss out other nearby states
-if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
-	acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2011 , ]
+# for alabama 2016, toss out other nearby states
+if( any( acs_cat$stateab == 'al' & acs_cat$year == 2016 ) ){
+	acs_cat <- acs_cat[ acs_cat$stateab == 'al' & acs_cat$year == 2016 , ]
 }
 
 acs_cat <- lodown( "acs" , acs_cat )
 
-if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
+if( any( acs_cat$stateab == 'al' & acs_cat$year == 2016 & acs_cat$time_period == '1-Year' ) ){
 
 
 
@@ -40,11 +37,11 @@ if( any( acs_cat$stateab == 'al' & acs_cat$year == 2011 ) ){
 # # alternative subsets:
 
 # # nationwide merged table including puerto rico
-# acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' )
+# acs_cat <- subset( acs_cat , year == 2016 & time_period == '1-Year' )
 # acs_cat <- lodown( "acs" , acs_cat )
 
 # # nationwide merged table excluding puerto rico
-# acs_cat <- subset( acs_cat , year == 2011 & time_period == '1-Year' & stateab != 'pr' )
+# acs_cat <- subset( acs_cat , year == 2016 & time_period == '1-Year' & stateab != 'pr' )
 # acs_cat <- lodown( "acs" , acs_cat )
 
 library(survey)
@@ -52,7 +49,7 @@ library(survey)
 acs_df <- 
 	readRDS( 
 		file.path( getwd() , 
-			"acs2011_1yr.rds" ) 
+			"acs2016_1yr.rds" ) 
 	)
 
 # because of the catalog subset above
