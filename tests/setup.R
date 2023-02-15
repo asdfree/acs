@@ -43,6 +43,9 @@ acs_df <- merge( acs_df_household , acs_df_person )
 stopifnot( nrow( acs_df ) == nrow( acs_df_person ) )
 
 acs_df[ , 'one' ] <- 1
+# acs_fn <- file.path( path.expand( "~" ) , "ACS" , "this_file.rds" )
+# saveRDS( acs_df , file = acs_fn , compress = FALSE )
+# acs_df <- readRDS( acs_fn )
 library(survey)
 
 acs_design <-
