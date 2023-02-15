@@ -43,7 +43,6 @@ acs_df <- merge( acs_df_household , acs_df_person )
 stopifnot( nrow( acs_df ) == nrow( acs_df_person ) )
 
 acs_df[ , 'one' ] <- 1
-
 library(survey)
 
 acs_design <-
