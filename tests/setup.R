@@ -185,18 +185,6 @@ glm_result <-
 	)
 
 summary( glm_result )
-library(convey)
-acs_design <- convey_prep( acs_design )
-
-svygini( ~ hincp , acs_design , na.rm = TRUE )
-library(srvyr)
-acs_srvyr_design <- as_survey( acs_design )
-acs_srvyr_design %>%
-	summarize( mean = survey_mean( poverty_level , na.rm = TRUE ) )
-
-acs_srvyr_design %>%
-	group_by( cit ) %>%
-	summarize( mean = survey_mean( poverty_level , na.rm = TRUE ) )
 stopifnot( round( coef( svytotal( ~ one , acs_design ) ) , 0 ) == 5039877 )
 pums_estimate <- 
 	c(288139L, 299245L, 336727L, 334606L, 327102L, 635004L, 641405L, 
@@ -234,3 +222,15 @@ stopifnot( all( round( SE( results ) , 0 ) == pums_standard_error ) )
 
 stopifnot( all( round( SE( results ) * 1.645 , 0 ) == pums_margin_of_error ) )
 
+library(convey)
+acs_design <- convey_prep( acs_design )
+
+svygini( ~ hincp , acs_design , na.rm = TRUE )
+library(srvyr)
+acs_srvyr_design <- as_survey( acs_design )
+acs_srvyr_design %>%
+	summarize( mean = survey_mean( poverty_level , na.rm = TRUE ) )
+
+acs_srvyr_design %>%
+	group_by( cit ) %>%
+	summarize( mean = survey_mean( poverty_level , na.rm = TRUE ) )
