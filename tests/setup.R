@@ -6,7 +6,7 @@ library(haven)
 tf_household <- tempfile()
 
 this_url_household <-
-	"https://www2.census.gov/programs-surveys/acs/data/pums/2022/1-Year/sas_hal.zip"
+	"https://www2.census.gov/programs-surveys/acs/data/pums/2023/1-Year/sas_hal.zip"
 
 download.file( this_url_household , tf_household , mode = 'wb' )
 
@@ -21,7 +21,7 @@ names( acs_df_household ) <- tolower( names( acs_df_household ) )
 tf_person <- tempfile()
 
 this_url_person <-
-	"https://www2.census.gov/programs-surveys/acs/data/pums/2022/1-Year/sas_pal.zip"
+	"https://www2.census.gov/programs-surveys/acs/data/pums/2023/1-Year/sas_pal.zip"
 
 download.file( this_url_person , tf_person , mode = 'wb' )
 
@@ -185,18 +185,18 @@ glm_result <-
 	)
 
 summary( glm_result )
-stopifnot( round( coef( svytotal( ~ one , acs_design ) ) , 0 ) == 5074296 )
+stopifnot( round( coef( svytotal( ~ one , acs_design ) ) , 0 ) == 5108468 )
 pums_estimate <- 
-	c(277094L, 316627L, 319132L, 336759L, 350132L, 651975L, 633907L, 
-	616899L, 317765L, 341937L, 543576L, 284790L, 83703L)
+	c(287689L, 306458L, 325713L, 355557L, 334520L, 640995L, 649985L, 
+	621783L, 307747L, 344812L, 553817L, 289119L, 90273L)
 
 pums_standard_error <- 
-	c(2624L, 5197L, 5002L, 4112L, 3626L, 5047L, 4559L, 4538L, 5849L, 
-	5731L, 2061L, 3527L, 2896L)
+	c(2698L, 5964L, 5865L, 5081L, 4427L, 5202L, 4615L, 4804L, 4947L, 
+	4804L, 2166L, 3600L, 3080L)
 
 pums_margin_of_error <- 
-	c(4317L, 8550L, 8229L, 6764L, 5964L, 8302L, 7499L, 7465L, 9622L, 
-	9427L, 3390L, 5801L, 4765L)
+	c(4439L, 9811L, 9647L, 8358L, 7282L, 8557L, 7592L, 7903L, 8137L, 
+	7902L, 3563L, 5922L, 5067L)
 
 results <-
 	svytotal( 
