@@ -234,3 +234,4 @@ acs_srvyr_design %>%
 acs_srvyr_design %>%
 	group_by( cit ) %>%
 	summarize( mean = survey_mean( poverty_level , na.rm = TRUE ) )
+
