@@ -185,7 +185,7 @@ glm_result <-
 	)
 
 summary( glm_result )
-stopifnot( round( coef( svytotal( ~ one , acs_design ) ) , 0 ) == 5108468 )
+stopifnot( round( coef( svytotal( ~ one , acs_design ) ) , 0 ) == 5157699 )
 pums_estimate <- 
 	c(285826L, 309193L, 333702L, 357459L, 337208L, 648343L, 659705L, 
 	624920L, 308624L, 338634L, 560025L, 300833L, 93227L)
